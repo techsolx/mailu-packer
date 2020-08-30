@@ -1,0 +1,25 @@
+builders:
+- type: amazon-ebs
+  ami_name: mailu-v0.1-{{timestamp}}
+  profile: techsolx
+  instance_type: t3.micro
+  region: us-west-2
+  source_ami_filter:
+    filters:
+      name: ubuntu/images/hvm-ssd/*ubuntu-bionic-18.04-amd64-server-*
+      root-device-type: ebs
+      virtualization-type: hvm
+    most_recent: true
+    owners:
+    - 099720109477
+  ssh_username: ubuntu
+provisioners:
+  - type: shell
+    script: ./scripts/install-docker.sh
+  - type: shell
+    inline: sudo usermod -aG docker $USER
+  - type: shell
+    expect_disconnect: true
+    inline: sudo reboot
+  - type: shell
+    script: ./scripts/cleanup.sh
