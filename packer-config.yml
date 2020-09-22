@@ -21,5 +21,9 @@ provisioners:
   - type: shell
     expect_disconnect: true
     inline: sudo reboot
+  - type: inspec
+    inspec_env_vars:
+      - CHEF_LICENSE=accept
+    profile: 'https://github.com/dev-sec/linux-baseline'
   - type: shell
     script: ./scripts/cleanup.sh
